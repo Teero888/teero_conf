@@ -1,11 +1,13 @@
 *
 
 !nvim/
-!alacritty/
-!i3/
-
 !nvim/**
+lazy-lock.json
+
+!alacritty/
 !alacritty/**
+
+!i3/
 !i3/**
 
-lazy-lock.json
+!.zshrc
