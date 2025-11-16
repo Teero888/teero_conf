@@ -24,11 +24,6 @@ require("lazy").setup({
 	require("plugins.mini"),
 	require("plugins.treesitter"),
 	require("plugins.perfanno"),
-	{
-		"folke/todo-comments.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
-	},
+	require("plugins.todo-comments"),
 	"sindrets/diffview.nvim",
 })
