@@ -1,10 +1,5 @@
-# Colors (Gruvbox dark)
-
-# Default colors
 [colors.primary]
-# hard contrast background = = '#1d2021'
 background = '#1a1a1a'
-# soft contrast background = = '#32302f'
 foreground = '#ebdbb2'
 
 [window]
@@ -13,12 +8,11 @@ opacity = 1.0
 [terminal]
 # shell = {program = "zsh", args = []}
 # shell = {program = "nvim", args = ["--cmd 'term'"]}
-shell = {program = "nvim", args = ["."]}
+shell = {program = "nvim", args = []}
 
 [mouse]
 hide_when_typing = true
 
-# Normal colors
 [colors.normal]
 black   = '#282828'
 red     = '#cc241d'
@@ -29,7 +23,6 @@ magenta = '#b16286'
 cyan    = '#689d6a'
 white   = '#a89984'
 
-# Bright colors
 [colors.bright]
 black   = '#928374'
 red     = '#fb4934'
