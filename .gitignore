@@ -11,3 +11,4 @@ lazy-lock.json
 !i3/**
 
 !.zshrc
+!update_mirrors.sh

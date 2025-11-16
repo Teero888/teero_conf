@@ -28,8 +28,8 @@ floating_modifier $mod
 default_border pixel 0
 default_floating_border pixel 0
 for_window [class="^.*"] border pixel 0
-bindsym Control+q exec --no-startup-id xdotool click 1
-bindsym Control+e exec --no-startup-id xdotool click 3
+bindsym Mod1+q exec --no-startup-id xdotool click 1
+bindsym Mod1+e exec --no-startup-id xdotool click 3
 bindsym $mod+q exec --no-startup-id alacritty
 bindsym $mod+c kill
 bindsym $mod+Shift+d exec --no-startup-id dmenu_run -l 1000
