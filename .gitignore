@@ -20,12 +20,18 @@ emacs/url
 emacs/projectile-bookmarks.eld
 emacs/*.elc
 emacs/tramp
+emacs/games
+emacs/projects
+emacs/eshell
+emacs/elpa
 
 !i3/
 !i3/**
 
 !frametee/
 !frametee/**
+frametee/cache
+frametee/skins
 
 !keyd/
 !keyd/**
@@ -36,3 +42,7 @@ emacs/tramp
 !.zshrc
 !update_mirrors.sh
 /emacs/transient/
+
+*.bak
+*~.*
+\#*\#

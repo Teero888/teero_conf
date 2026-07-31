@@ -1,86 +1,99 @@
-;;; init.el
+;; -*- lexical-binding: t; -*-
+;; Maximize garbage collection threshold during startup
+(defvar default-gc-cons-threshold 67108864) ; 64MiB
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
 
-;; ── Performance Optimization ────────────────────────────────
-(setq straight-check-for-modifications '(check-on-save find-when-checking))
-(setq-default gc-cons-threshold (* 16 1024 1024)) ; 16MB after startup
+;; packages
+(use-package sudo-edit)
 
-;; ── Straight.el Bootstrap ───────────────────────────────────
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; org mode setup
+(use-package org
+  :defer t)
 
-;; ── Load Path ───────────────────────────────────────────────
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(use-package vertico
+  :init
+  (vertico-mode)
+  :bind (:map vertico-map
+         ("<up>" . previous-history-element)
+         ("<down>" . next-history-element)
+         ("<right>" . vertico-insert))
+  :custom
+  (vertico-cycle t))
 
-(straight-use-package 'use-package)
-(setq straight-use-package-by-default t)
-(setq use-package-always-defer t)
-
-;; ── Environment ─────────────────────────────────────────────
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
+(use-package fancy-compilation
+  :ensure t
   :config
-  (exec-path-from-shell-initialize))
+  (fancy-compilation-mode 1))
 
-(let ((npm-bin (expand-file-name "~/.npm-global/bin"))
-      (local-bin (expand-file-name "~/.local/bin"))
-      (cargo-bin (expand-file-name "~/.cargo/bin")))
-  (dolist (path (list npm-bin local-bin cargo-bin))
-    (when (file-directory-p path)
-      (add-to-list 'exec-path path)
-      (setenv "PATH" (concat path ":" (getenv "PATH"))))))
+;; eshel config
+(use-package eshell
+  :defer 5
+  :config
+  (setq eshell-banner-message "Welcome back, Teero\n")
+  (setq eshell-history-size 100000
+	eshell-save-history-on-exit t)
+  (with-eval-after-load 'em-term
+    (add-to-list 'eshell-visual-commands "htop")
+    (add-to-list 'eshell-visual-commands "top")
+    (add-to-list 'eshell-visual-commands "less")
+    (add-to-list 'eshell-visual-commands "agy")
+    (add-to-list 'eshell-visual-commands "perf report")))
 
-;; ── Core Modules ────────────────────────────────────────────
-(require 'setup-ui)
-(require 'setup-evil)
-(require 'setup-completion)
-(require 'setup-projects)
-(require 'setup-terminal)
-(require 'setup-git)
-(require 'setup-lsp)
-(require 'setup-languages)
-(require 'setup-keys)
-(require 'setup-eww)
+(defun eshell/f (file)
+  "Open FILE in the current Emacs frame."
+  (find-file file))
 
-;; ── Sane Defaults ───────────────────────────────────────────
-(setq-default
- tab-width 4
- indent-tabs-mode nil
- truncate-lines t
- fill-column 80)
+;; parentheses
+(electric-pair-mode 1)
+(setq electric-pair-preserve-balance t)
 
-;; Suppress undo discard-info warnings
-(add-to-list 'warning-suppress-types '(undo discard-info))
-(setq eww-download-directory "~/downloads/eww/")
+;; autocompletion
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode)
+  :config
+  (setq corfu-auto t
+        corfu-auto-delay 0.1
+        corfu-auto-prefix 1
+        corfu-quit-no-match 'separator)
+  ;; prevent blocking myself
+  (define-key corfu-map (kbd "<tab>") #'corfu-next)        ; TAB goes down
+  (define-key corfu-map (kbd "TAB") #'corfu-next)          ; (For terminal Emacs)
+  (define-key corfu-map (kbd "<backtab>") #'corfu-previous) ; Shift+TAB goes up
+  (define-key corfu-map (kbd "C-z") #'corfu-complete)     ; C-z confirms selection
+  ;; let enter be normal
+  (define-key corfu-map (kbd "RET") nil)
+  (define-key corfu-map (kbd "<up>") nil)
+  (define-key corfu-map (kbd "<down>") nil))
 
-(set-language-environment "UTF-8")
-(prefer-coding-system 'utf-8)
+(use-package eglot
+  :ensure nil
+  :hook
+  ((c-mode c++-mode rust-mode) . eglot-ensure))
 
-(setq make-backup-files nil
-      create-lockfiles nil
-      auto-save-default nil)
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
-;; Scrolling
-(setq scroll-margin 15
-      scroll-step 1
-      scroll-conservatively 101
-      scroll-preserve-screen-position t
-      mouse-wheel-scroll-amount '(1 ((shift) . 1))
-      mouse-wheel-progressive-speed nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("9e5e0ff3a81344c9b1e6bfc9b3dcf9b96d5ec6a60d8de6d4c762ee9e2121dfb2"
+     "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
+     "921f165deb8030167d44eaa82e85fcef0254b212439b550a9b6c924f281b5695"
+     "d481904809c509641a1a1f1b1eb80b94c58c210145effc2631c1a7f2e4a2fdf4"
 
-;; Hooks
-(add-hook 'after-init-hook #'global-auto-revert-mode)
-(add-hook 'after-init-hook #'save-place-mode)
-(add-hook 'after-init-hook #'savehist-mode)
-(add-hook 'after-init-hook #'electric-pair-mode)
-
-(provide 'init)
+     default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

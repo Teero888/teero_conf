@@ -1,17 +1,50 @@
 # Frametee Configuration (https://github.com/Teero888/frametee)
 
 [keybinds]
-dummy_fire = "MouseLeft"
 
 [mouse]
 sensitivity = 80.00
-max_distance = 421.00
+max_distance = 200.00
 
 [graphics]
 vsync = false
 show_fps = true
-fps_limit = 500
-lod_bias = -0.60
-bg_color = [0.275, 0.292, 0.311]
+fps_limit = 0
+lod_bias = -0.50
+bg_color = [0.253, 0.253, 0.253]
 prediction_alpha = [1.000, 1.000]
 center_dot = false
+render_map = true
+render_players = true
+render_weapons = true
+render_particles = true
+render_pickups = true
+render_hud = true
+
+[projects]
+recent = [
+  "/home/teero/tasp/buggymouse.tasp",
+  "/home/teero/tasp/nadebug.tasp",
+  "/home/teero/tasp/flag.tasp",
+  "/home/teero/tasp/frustrainleave_skips.tasp",
+  "/home/teero/tasp/deadrun1802.tasp",
+  "/home/teero/tasp/abyssal_784.tasp",
+  "/home/teero/tasp/goldie.tasp",
+]
+
+[gameplay]
+game_mode = 1
+
+[auto_save]
+enabled = true
+interval_sec = 60
+
+[recording]
+auto_generate_finish_events = true
+
+[plugins]
+libapi_example_c_plugin = false
+librandom_input_filler = false
+libphysics_profiler_plugin = false
+libultraforce_plugin = true
+libapi_example_cpp_plugin = false

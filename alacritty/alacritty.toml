@@ -6,9 +6,10 @@ foreground = '#ebdbb2'
 opacity = 1.0
 
 [terminal]
-# shell = {program = "zsh", args = []}
+shell = {program = "zsh", args = []}
 # shell = {program = "nvim", args = ["--cmd 'term'"]}
-shell = {program = "nvim", args = ["todo.md"]}
+# shell = {program = "nvim", args = ["todo.md"]}
+# shell = {program = "emacs", args = ["-f shell"]}
 
 [mouse]
 hide_when_typing = true
@@ -57,3 +58,8 @@ style = "Italic"
 [font.normal]
 family = "JetBrainsMono NFM"
 style = "Regular"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

@@ -1,48 +1,45 @@
-;;; early-init.el --- Startup performance & UI suppression -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
+(setq inhibit-splash-screen t
+      inhibit-startup-message t)
 
-;; ── UI Performance ──────────────────────────────────────────
-(setq frame-inhibit-implied-resize t)
+;; Prevent UI elements from rendering at all
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
-(push '(vertical-scroll-bars) default-frame-alist)
-(push '(horizontal-scroll-bars) default-frame-alist)
+(push '(vertical-scroll-bars . nil) default-frame-alist)
+(setq inhibit-splash-screen t)
+(scroll-bar-mode -1)                 ; Disable visible scrollbar
+(tool-bar-mode -1)                   ; Disable the toolbar
+(tooltip-mode -1)                    ; Disable tooltips
+(menu-bar-mode -1)                   ; Disable the menu bar
+(global-display-line-numbers-mode t) ; Enable line numbers
+(transient-mark-mode 1)              ; Highlight text selections
 
-;; Background and fonts early to prevent flickering
-(push '(background-color . "#282c34") default-frame-alist)
-(push '(foreground-color . "#bbc2cf") default-frame-alist)
-(push '(font . "JetBrainsMono NFM") default-frame-alist) ; Set font early
+;; straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/bootstrap.el")
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; Disable some UI elements that are redundant
-(setq menu-bar-mode nil
-      tool-bar-mode nil
-      scroll-bar-mode nil)
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
-;; ── Package.el — disable it since we use straight.el ────────
-(setq package-enable-at-startup nil)
+;; themes
+(use-package doom-themes
+  :config
+  (load-theme 'doom-pine t)
+  (doom-themes-org-config))
 
-;; ── GC tuning — defer garbage collection during startup ─────
-;; Use a large threshold during startup, then lower it in emacs-startup-hook
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (* 16 1024 1024)
-                  gc-cons-percentage 0.1)))
-
-;; ── File handler — skip regexp checks during startup ────────
-(defvar my/saved-file-name-handler-alist file-name-handler-alist)
-(setq file-name-handler-alist nil)
-(add-hook 'emacs-startup-hook
-          (lambda () (setq file-name-handler-alist my/saved-file-name-handler-alist)))
-
-;; ── Native comp — no popup warnings ─────────────────────────
-(setq native-comp-async-report-warnings-errors nil)
-
-;; ── Startup message suppression ─────────────────────────────
-(setq inhibit-startup-screen t
-      inhibit-startup-message t
-      initial-scratch-message nil)
-
-;; Faster loading
-(setq load-prefer-newer t)
+;; set the default font and sized
+(set-face-attribute 'default nil 
+                    :font "JetBrainsMonoNLNerdFontMono" 
+                    :height 180)
