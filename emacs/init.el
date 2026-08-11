@@ -71,7 +71,40 @@
 (use-package eglot
   :ensure nil
   :hook
-  ((c-mode c++-mode rust-mode) . eglot-ensure))
+  ((c-mode
+    c++-mode
+    rust-mode
+    html-mode
+    mhtml-mode
+    css-mode
+    css-ts-mode
+    js-mode
+    js-ts-mode
+    typescript-mode
+    typescript-ts-mode
+    tsx-ts-mode
+    json-mode
+    json-ts-mode) . eglot-ensure)
+  :config
+  ;; Explicitly map modes to vscode language servers with formatting enabled
+  (add-to-list 'eglot-server-programs
+               '((html-mode mhtml-mode) . ("vscode-html-language-server" "--stdio"
+                                           :initializationOptions
+                                           (:provideFormatter t))))
+  (add-to-list 'eglot-server-programs
+               '((css-mode css-ts-mode) . ("vscode-css-language-server" "--stdio"
+                                           :initializationOptions
+                                           (:provideFormatter t))))
+  (add-to-list 'eglot-server-programs
+               '((json-mode json-ts-mode) . ("vscode-json-language-server" "--stdio"
+                                             :initializationOptions
+                                             (:provideFormatter t)))))
+
+;; TypeScript mode configuration
+(use-package typescript-mode
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  :config
+  (setq typescript-indent-level 2))
 
 (use-package orderless
   :ensure t

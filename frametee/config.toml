@@ -13,6 +13,9 @@ fps_limit = 0
 lod_bias = -0.50
 bg_color = [0.253, 0.253, 0.253]
 prediction_alpha = [1.000, 1.000]
+show_prediction = true
+cursor_scale = 1.000
+render_cursor_follow = true
 center_dot = false
 render_map = true
 render_players = true
@@ -23,13 +26,14 @@ render_hud = true
 
 [projects]
 recent = [
+  "/home/teero/tasp/run_grass_short.tasp",
   "/home/teero/tasp/buggymouse.tasp",
   "/home/teero/tasp/nadebug.tasp",
   "/home/teero/tasp/flag.tasp",
   "/home/teero/tasp/frustrainleave_skips.tasp",
   "/home/teero/tasp/deadrun1802.tasp",
   "/home/teero/tasp/abyssal_784.tasp",
-  "/home/teero/tasp/goldie.tasp",
+  "/home/teero/tasp/goldie.tasp"
 ]
 
 [gameplay]
@@ -46,5 +50,4 @@ auto_generate_finish_events = true
 libapi_example_c_plugin = false
 librandom_input_filler = false
 libphysics_profiler_plugin = false
-libultraforce_plugin = true
 libapi_example_cpp_plugin = false
